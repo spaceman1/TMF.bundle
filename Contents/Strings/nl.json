@@ -1,0 +1,18 @@
+{
+	// Title
+
+	"PLUGIN_TITLE"							: "TMF",
+
+	// Menu captions
+
+	"TITLE_TV_STREAMS"						: "TV streams",
+	"TITLE_VIDEO_CLIPS"						: "Videoclips",
+	"TITLE_PREFERENCES"						: "Voorkeursinstellingen",
+	"TITLE_VIDEOS"							: "Video's",
+
+	// Preferences
+
+	"SHOW_TV_STREAMS"						: "Toon TV streams",
+	"SHOW_VIDEOCLIPS"						: "Toon Videoclips",
+	"SHOW_HI_RES_THUMBS"					: "Toon hoge resolutie afbeeldingen"
+}

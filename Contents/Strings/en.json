@@ -1,0 +1,18 @@
+{
+	// Title
+
+	"PLUGIN_TITLE"							: "The Music Factory",
+
+	// Menu captions
+
+	"TITLE_TV_STREAMS"						: "TV streams",
+	"TITLE_VIDEO_CLIPS"						: "Videoclips",
+	"TITLE_PREFERENCES"						: "Preferences",
+	"TITLE_VIDEOS"							: "Videos",
+
+	// Preferences
+
+	"SHOW_TV_STREAMS"						: "Show TV streams",
+	"SHOW_VIDEOCLIPS"						: "Show Videoclips",
+	"SHOW_HI_RES_THUMBS"					: "Show high resolution thumbnails for artists"
+}
