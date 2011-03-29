@@ -43,9 +43,9 @@ def Start():
 def MainMenu():
   dir = MediaContainer(noCache=True)
 
-  if Prefs['showtvstreams'] != False and Prefs['showtvstreams'] != 'false':
+  if Prefs['showtvstreams']:
     dir.Append(Function(DirectoryItem(TvStreams, title=L("TITLE_TV_STREAMS"), thumb=R(PLUGIN_ICON_DEFAULT))))
-  if Prefs['showvideoclips'] != False and Prefs['showvideoclips'] != 'false':
+  if Prefs['showvideoclips']:
     dir.Append(Function(DirectoryItem(VideoClipsAtoZ, title=L("TITLE_VIDEO_CLIPS"), thumb=R(PLUGIN_ICON_DEFAULT))))
   dir.Append(PrefsItem(L("TITLE_PREFERENCES"), thumb=R(PLUGIN_ICON_DEFAULT)))
 
@@ -103,7 +103,7 @@ def Artists(sender, letter):
       id = item.xpath('./div[@class="title"]/a')[0].get('href').split('/')[2]
       artist = item.xpath('./div[@class="title"]/a')[0].text.strip()
 
-      if Prefs['showhiresthumbs'] != False and Prefs['showhiresthumbs'] != 'false':
+      if Prefs['showhiresthumbs']:
         thumb = HTML.ElementFromURL(TMF_ARTIST_PAGE % id, errors='ignore').xpath('//div[@class="groupPhotoMain"]')[0].get('style')
         thumb = re.search(r'url\((.+)\);', thumb).group(1)
       else:
@@ -166,10 +166,3 @@ def PlayVideo(sender, videoId):
     return Redirect('plex://localhost/video/:/webkit?url=' + String.Quote(url, usePlus=True))
   else:
     return None
-
-####################################################################################################
-
-def CreatePrefs():
-  Prefs.Add(id='showtvstreams', type='bool', default=True, label=L("SHOW_TV_STREAMS"))
-  Prefs.Add(id='showvideoclips', type='bool', default=True, label=L("SHOW_VIDEOCLIPS"))
-  Prefs.Add(id='showhiresthumbs', type='bool', default=False, label=L("SHOW_HI_RES_THUMBS"))
