@@ -73,8 +73,10 @@ def VideoClipsAtoZ(sender):
   dir = MediaContainer(title2=L("TITLE_VIDEO_CLIPS"))
 
   # A to Z
-  for char in string.ascii_uppercase:
-    dir.Append(Function(DirectoryItem(Artists, title=char, thumb=R(PLUGIN_ICON_DEFAULT)), letter=char))
+  chars = string.ascii_uppercase
+  for i in range(26):
+    dir.Append(Function(DirectoryItem(Artists, title=chars[i], thumb=R(PLUGIN_ICON_DEFAULT)), letter=chars[i]))
+    i += 1
 
   # 0-9
   dir.Append(Function(DirectoryItem(Artists, title='0-9', thumb=R(PLUGIN_ICON_DEFAULT)), letter='0-9'))
