@@ -1,31 +1,28 @@
-from PMS import *
-from PMS.Objects import *
-from PMS.Shortcuts import *
 import base64, re, string
 
 ####################################################################################################
 
-PLUGIN_TITLE                    = "TMF"
-PLUGIN_PREFIX                   = "/video/tmf"
+PLUGIN_TITLE = "TMF"
+PLUGIN_PREFIX = "/video/tmf"
 
-TMF_BASE_URL                    = "http://www.tmf.nl"
-TMF_CONTENT                     = "%s/ajax/?letterResults=%%s" % TMF_BASE_URL
-TMF_ARTISTS_QUERY               = "type=artists&static=true&letter=%s&pagina=%d&m=common/alphabetic_list"
-TMF_ARTIST_PAGE                 = "%s/artiesten/%%s/" % TMF_BASE_URL
-TMF_ARTIST_VIDEOS               = "%s/xml/videoplayer/related.php?id=%%s&action=all" % TMF_BASE_URL
-TMF_VIDEO_INFO                  = "%s/xml/videoplayer/mrss.php?uri=mgid:nlcms:video:tmf.nl:%%s" % TMF_BASE_URL
+TMF_BASE_URL = "http://www.tmf.nl"
+TMF_CONTENT = "%s/ajax/?letterResults=%%s" % TMF_BASE_URL
+TMF_ARTISTS_QUERY = "type=artists&static=true&letter=%s&pagina=%d&m=common/alphabetic_list"
+TMF_ARTIST_PAGE = "%s/artiesten/%%s/" % TMF_BASE_URL
+TMF_ARTIST_VIDEOS = "%s/xml/videoplayer/related.php?id=%%s&action=all" % TMF_BASE_URL
+TMF_VIDEO_INFO = "%s/xml/videoplayer/mrss.php?uri=mgid:nlcms:video:tmf.nl:%%s" % TMF_BASE_URL
 
 # RSS feed with TV stream info
-TMF_TV_STREAMS_FEED             = "http://pipes.yahoo.com/pipes/pipe.run?_id=woCrdodv3hG3mPCcwmH_9A&_render=rss"
+TMF_TV_STREAMS_FEED = "http://pipes.yahoo.com/pipes/pipe.run?_id=woCrdodv3hG3mPCcwmH_9A&_render=rss"
 
 # Plex webplayer for RTMP streams
-PLEXAPP_RTMP_PLAYER_URL         = "http://www.plexapp.com/player/player.php?url=%s&clip=%s"
+PLEXAPP_RTMP_PLAYER_URL = "http://www.plexapp.com/player/player.php?url=%s&clip=%s"
 
-CACHE_INTERVAL                  = 86400
+CACHE_INTERVAL = CACHE_1DAY
 
 # Default artwork and icon(s)
-PLUGIN_ARTWORK                  = "art-default.png"
-PLUGIN_ICON_DEFAULT             = "icon-default.png"
+PLUGIN_ARTWORK = "art-default.png"
+PLUGIN_ICON_DEFAULT = "icon-default.png"
 
 ####################################################################################################
 
@@ -46,9 +43,9 @@ def Start():
 def MainMenu():
   dir = MediaContainer(noCache=True)
 
-  if Prefs.Get('showtvstreams') != False and Prefs.Get('showtvstreams') != 'false':
+  if Prefs['showtvstreams'] != False and Prefs['showtvstreams'] != 'false':
     dir.Append(Function(DirectoryItem(TvStreams, title=L("TITLE_TV_STREAMS"), thumb=R(PLUGIN_ICON_DEFAULT))))
-  if Prefs.Get('showvideoclips') != False and Prefs.Get('showvideoclips') != 'false':
+  if Prefs['showvideoclips'] != False and Prefs['showvideoclips'] != 'false':
     dir.Append(Function(DirectoryItem(VideoClipsAtoZ, title=L("TITLE_VIDEO_CLIPS"), thumb=R(PLUGIN_ICON_DEFAULT))))
   dir.Append(PrefsItem(L("TITLE_PREFERENCES"), thumb=R(PLUGIN_ICON_DEFAULT)))
 
@@ -90,7 +87,7 @@ def Artists(sender, letter):
   dir = MediaContainer(title1=L("TITLE_VIDEO_CLIPS"), title2=letter)
 
   query = base64.b64encode(TMF_ARTISTS_QUERY % (letter.lower(), 1))
-  content = XML.ElementFromURL(TMF_CONTENT % query, isHTML=True, errors='ignore')
+  content = HTML.ElementFromURL(TMF_CONTENT % query, errors='ignore')
 
   # Number of pages for this letter
   pages = content.xpath('//div[@class="cb"]/a')
@@ -100,14 +97,14 @@ def Artists(sender, letter):
 
   for i in range(1, numPages+1):
     query = base64.b64encode(TMF_ARTISTS_QUERY % (letter.lower(), i))
-    content = XML.ElementFromURL(TMF_CONTENT % query, isHTML=True, errors='ignore').xpath('//div[@class="cb item"]')
+    content = HTML.ElementFromURL(TMF_CONTENT % query, errors='ignore').xpath('//div[@class="cb item"]')
 
     for item in content:
-      id     = item.xpath('./div[@class="title"]/a')[0].get('href').split('/')[2]
+      id = item.xpath('./div[@class="title"]/a')[0].get('href').split('/')[2]
       artist = item.xpath('./div[@class="title"]/a')[0].text.strip()
 
-      if Prefs.Get('showhiresthumbs') != False and Prefs.Get('showhiresthumbs') != 'false':
-        thumb = XML.ElementFromURL(TMF_ARTIST_PAGE % id, isHTML=True, errors='ignore').xpath('//div[@class="groupPhotoMain"]')[0].get('style')
+      if Prefs['showhiresthumbs'] != False and Prefs['showhiresthumbs'] != 'false':
+        thumb = HTML.ElementFromURL(TMF_ARTIST_PAGE % id, errors='ignore').xpath('//div[@class="groupPhotoMain"]')[0].get('style')
         thumb = re.search(r'url\((.+)\);', thumb).group(1)
       else:
         # Find lo-res thumbs

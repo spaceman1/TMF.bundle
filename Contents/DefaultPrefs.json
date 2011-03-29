@@ -1,0 +1,21 @@
+[
+  {
+    "id":"showtvstreams",
+    "type":"bool",
+    "label":"Show TV Streams",
+    "default":"true"
+  },
+  {
+    "id":"showvideoclips",
+    "type":"bool",
+    "label":"Show Video clips",
+    "default":"true"
+  },
+  {
+    "id":"showhiresthumbs",
+    "type":"bool",
+    "label":"Show high resolution",
+    "default":"true"
+  }
+
+]
